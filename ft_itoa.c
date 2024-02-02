@@ -3,75 +3,60 @@
 /*                                                        :::      ::::::::   */
 /*   ft_itoa.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emfourni <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: emfourni <emfourni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/07/20 10:20:09 by emfourni          #+#    #+#             */
-/*   Updated: 2023/07/20 12:09:59 by emfourni         ###   ########.fr       */
+/*   Created: 2023/11/17 16:25:16 by emfourni          #+#    #+#             */
+/*   Updated: 2023/11/20 13:07:58 by emfourni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
+#include "libft.h"
 
-int	ft_count(int nb)
+static int	ft_nb_len(int n)
 {
-	int	i;
-
-	i = 0;
-	if (nb == 0)
-	{
-		return (1);
-	}
-	else if (nb < 0)
-	{
-		nb *= -1;
-		i++;
-	}
-	while (nb > 0)
-	{
-		nb /= 10;
-		i++;
-	}
-	return (i);
-}
-
-char	*ft_itoa(int nbr)
-{
-	long 	n;
 	int	len;
-	char	*res;
-	int	i;
 
-	n = nbr;
-	len = ft_count(nbr);
-	i = len - 1;
-	res = (char *)malloc(sizeof(char) * (len + 1));
-	if (n == 0)
-		res[i] = '0';
-	else if (nbr == -2147483648)
+	len = 0;
+	if (n <= 0)
+		len = 1;
+	while (n != 0)
 	{
-		res = "-2147483648";
-		return (res);
-	}
-	else if (n < 0)
-	{
-		res[0] = '-';
-		n *= -1;
-	}
-	while (n > 0)
-	{
-		res[i] = n % 10 + 48;
-		i--;
+		len++;
 		n /= 10;
 	}
-	res[len] = '\0';
-	return (res);
+	return (len);
 }
 
-#include <stdio.h>
-
-int	main(int argc, char **argv)
+static	char	*ft_write_nb(char *itoa, unsigned int nb, int len)
 {
-	if (argc == 2)
-		printf("%s\n", ft_itoa(atoi(argv[1])));
-	return (0);
+	while (nb > 0)
+	{
+		itoa[len--] = nb % 10 + 48;
+		nb /= 10;
+	}
+	return (itoa);
+}
+
+char	*ft_itoa(int n)
+{
+	char			*itoa;
+	int				len;
+	unsigned int	nb;
+
+	len = ft_nb_len(n);
+	itoa = (char *)malloc(sizeof(char) * (len + 1));
+	if (!itoa)
+		return (NULL);
+	itoa[len--] = '\0';
+	if (n == 0)
+		itoa[0] = '0';
+	if (n < 0)
+	{
+		nb = n * -1;
+		itoa[0] = '-';
+	}
+	else
+		nb = n;
+	itoa = ft_write_nb(itoa, nb, len);
+	return (itoa);
 }

@@ -3,126 +3,92 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emfourni <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: emfourni <emfourni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/07/12 10:55:43 by emfourni          #+#    #+#             */
-/*   Updated: 2023/07/19 12:14:33 by emfourni         ###   ########.fr       */
+/*   Created: 2023/11/17 15:03:57 by emfourni          #+#    #+#             */
+/*   Updated: 2023/11/20 17:32:07 by emfourni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
+#include "libft.h"
 
-int	ft_strlen(char *str)
+static size_t	ft_countword(char const *str, char c)
 {
-	int	i;
+	size_t	index;
+	size_t	count;
 
-	i = 0;
-	while (str[i])
-		i++;
-	return (i);
-}
-
-int	ft_doublon(char c, char *charset)
-{
-	int	i;
-
-	i = 0;
-	while (charset[i])
+	index = 0;
+	count = 0;
+	while (str[index])
 	{
-		if (charset[i] == c || c == '\0')
-			return (1);
-		i++;
+		while (str[index] && str[index] == c)
+			index++;
+		if (str[index] && str[index] != c)
+		{
+			count++;
+			while (str[index] && str[index] != c)
+				index++;
+		}
 	}
-	return (0);
+	return (count);
 }
 
-char	*ft_strdup(char *src)
+static	char	*ft_worddup(const char *str, char c)
 {
-	int		i;
-	char	*dest;
+	size_t	index;
+	char	*dst;
 
-	i = 0;
-	dest = (char *)malloc(sizeof(char) * (ft_strlen(src) + 1));
-	if (!dest)
+	index = 0;
+	while (str[index] && str[index] != c)
+		index++;
+	dst = malloc(sizeof(char) * (index + 1));
+	if (!dst)
 		return (NULL);
-	while (src[i])
+	index = 0;
+	while (str[index] && str[index] != c)
 	{
-		dest[i] = src[i];
-		i++;
+		dst[index] = str[index];
+		index++;
 	}
-	dest[i] = '\0';
-	return (dest);
+	dst[index] = '\0';
+	return (dst);
 }
 
-int	ft_allocate(char *str2, char *charset)
+void	ft_free(char **str, int i)
 {
-	int	i;
-	int	wordcount;
-
-	i = -1;
-	wordcount = 0;
-	while (str2[++i])
+	while (i > 0)
 	{
-		if (!ft_doublon(str2[i], charset) && (i == 0 || ft_doublon(str2[i - 1],
-					charset)))
-			wordcount++;
-		else if (ft_doublon(str2[i], charset))
-			str2[i] = '\0';
+		free(str[i]);
+		i--;
 	}
-	return (wordcount);
+	free(str);
 }
 
-char	**ft_split(char *str, char *charset)
+char	**ft_split(char const *s, char c)
 {
 	int		i;
-	int		count;
-	int		word_index;
-	char	*str2;
 	char	**split;
 
-	count = 0;
-	word_index = 0;
-	str2 = ft_strdup(str);
-	i = ft_allocate(str2, charset);
-	split = (char **)malloc(sizeof(char *) * (i + 1));
+	i = 0;
+	if (!s)
+		return (0);
+	split = malloc(sizeof(char *) * (ft_countword(s, c) + 1));
 	if (!split)
 		return (NULL);
-	split[i] = NULL;
-	i = -1;
-	while (++i <= ft_strlen(str))
+	while (*s)
 	{
-		if (((str2[i] == '\0' && i != 0) || i == ft_strlen(str)) && i != 0
-			&& str2[i - 1] != '\0')
-			split[count++] = ft_strdup(&str2[word_index]);
-		else if (str2[i] != '\0' && (i == 0 || str2[i - 1] == '\0'))
-			word_index = i;
+		while (*s && *s == c)
+			s++;
+		if (*s && *s != c)
+		{
+			split[i] = ft_worddup(s, c);
+			if (!split[i])
+				return (ft_free(split, i), NULL);
+			i++;
+			while (*s && *s != c)
+				s++;
+		}
 	}
+	split[i] = NULL;
 	return (split);
-}
-
-#include <unistd.h>
-
-void    print_tab(char **split)
-{
-        int     i;
-        int     j;
-
-        i = 0;
-        while (split[i])
-        {
-                j = 0;
-                while (split[i][j])
-                {
-                        write(1, &split[i][j++], 1);
-                }
-                write(1, "\n", 1);
-                i++;
-        }
-}
-
-int     main(int argc, char **argv)
-{
-        if (argc == 3)
-                print_tab(ft_split(argv[1], argv[2]));
-        return (0);
 }
