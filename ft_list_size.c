@@ -1,49 +1,47 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strdup.c                                        :+:      :+:    :+:   */
+/*   ft_list_size.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: emilefournier <emilefournier@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/14 13:09:43 by emilefourni       #+#    #+#             */
-/*   Updated: 2024/02/14 13:15:12 by emilefourni      ###   ########.fr       */
+/*   Created: 2024/02/20 20:58:36 by emilefourni       #+#    #+#             */
+/*   Updated: 2024/02/20 21:12:47 by emilefourni      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
+#include "ft_list_size.h"
+#include <stdio.h>
 
-int ft_strlen(char *str)
+int	ft_list_size(t_list *begin_list)
 {
     int i;
 
     i = 0;
-    while (str[i])
+    if (!begin_list)
+        return (0);
+    while (begin_list)
+    {
+        begin_list = begin_list->next;
         i++;
+    }
     return (i);
 }
 
-char    *ft_strdup(char *src)
-{
-    int i;
-    char *dest;
-
-    i = 0;
-    dest = malloc(sizeof(char) * (ft_strlen(src) + 1));
-    if (!dest)
-        return (NULL);
-    while (src[i])
-    {
-        dest[i] = src[i];
-        i++;
-    }
-    dest[i] = '\0';
-    return (dest);
-}
-
 #include <stdio.h>
+#include <stdlib.h>
 
-int main(int argc, char *argv[])
+int main()
 {
-    printf("%s\n", ft_strdup(argv[1]));
-    return argc;
+    t_list *node1 = malloc(sizeof(t_list));
+    t_list *node2 = malloc(sizeof(t_list));
+
+    // Connect nodes
+    node1->next = node2;
+    node2->next = NULL;
+
+    printf("%d\n", ft_list_size(node1));
+    free(node1);
+    free(node2);
+    return 0;
 }

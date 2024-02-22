@@ -1,49 +1,41 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strdup.c                                        :+:      :+:    :+:   */
+/*   wdmatch.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: emilefournier <emilefournier@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/14 13:09:43 by emilefourni       #+#    #+#             */
-/*   Updated: 2024/02/14 13:15:12 by emilefourni      ###   ########.fr       */
+/*   Created: 2024/02/14 12:18:28 by emilefourni       #+#    #+#             */
+/*   Updated: 2024/02/14 12:45:06 by emilefourni      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
+#include <unistd.h>
 
-int ft_strlen(char *str)
+void    ft_putstr(char *str)
 {
     int i;
 
     i = 0;
     while (str[i])
-        i++;
-    return (i);
+        write(1, &str[i++], 1);
 }
-
-char    *ft_strdup(char *src)
-{
-    int i;
-    char *dest;
-
-    i = 0;
-    dest = malloc(sizeof(char) * (ft_strlen(src) + 1));
-    if (!dest)
-        return (NULL);
-    while (src[i])
-    {
-        dest[i] = src[i];
-        i++;
-    }
-    dest[i] = '\0';
-    return (dest);
-}
-
-#include <stdio.h>
 
 int main(int argc, char *argv[])
 {
-    printf("%s\n", ft_strdup(argv[1]));
-    return argc;
+    int i;
+    int j;
+
+    i = 0;
+    j = 0;
+    if (argc == 3)
+    {
+        while (argv[2][j])
+            if (argv[2][j++] == argv[1][i])
+                i++;
+        if (!argv[1][i])
+            ft_putstr(argv[1]);
+    }
+    write(1, "\n", 1);
+    return 0;
 }

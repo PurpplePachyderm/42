@@ -1,49 +1,41 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strdup.c                                        :+:      :+:    :+:   */
+/*   is_power_of_2.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: emilefournier <emilefournier@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/14 13:09:43 by emilefourni       #+#    #+#             */
-/*   Updated: 2024/02/14 13:15:12 by emilefourni      ###   ########.fr       */
+/*   Created: 2024/02/14 13:16:05 by emilefourni       #+#    #+#             */
+/*   Updated: 2024/02/22 12:49:18 by emilefourni      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <stdio.h>
 #include <stdlib.h>
 
-int ft_strlen(char *str)
+/*int is_power_of_2(int n)
 {
-    int i;
-
-    i = 0;
-    while (str[i])
-        i++;
-    return (i);
-}
-
-char    *ft_strdup(char *src)
-{
-    int i;
-    char *dest;
-
-    i = 0;
-    dest = malloc(sizeof(char) * (ft_strlen(src) + 1));
-    if (!dest)
-        return (NULL);
-    while (src[i])
+    while (n > 0)
     {
-        dest[i] = src[i];
-        i++;
+        n /= 2;
     }
-    dest[i] = '\0';
-    return (dest);
+    if (n == 0)
+        return (1);
+    else 
+        return (0);
+}*/
+
+int is_power_of_2(int nb)
+{
+    if (nb == 0)
+        return (0);
+    while (nb % 2 == 0)
+        nb /= 2;
+    return (nb == 1 ? 1 : 0);
 }
 
-#include <stdio.h>
-
-int main(int argc, char *argv[])
+int main(int argc, char const *argv[])
 {
-    printf("%s\n", ft_strdup(argv[1]));
+    printf("%d\n", is_power_of_2(atoi(argv[1])));
     return argc;
 }
