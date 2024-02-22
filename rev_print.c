@@ -1,49 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strdup.c                                        :+:      :+:    :+:   */
+/*   rev_print.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: emilefournier <emilefournier@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/14 13:09:43 by emilefourni       #+#    #+#             */
-/*   Updated: 2024/02/14 13:15:12 by emilefourni      ###   ########.fr       */
+/*   Created: 2024/02/12 16:16:59 by emilefourni       #+#    #+#             */
+/*   Updated: 2024/02/12 16:26:32 by emilefourni      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
+#include <unistd.h>
 
 int ft_strlen(char *str)
 {
-    int i;
+    int    i;
 
     i = 0;
-    while (str[i])
+    while (str[i] != '\0')
         i++;
     return (i);
 }
 
-char    *ft_strdup(char *src)
+int main(int argc, char **argv)
 {
     int i;
-    char *dest;
 
-    i = 0;
-    dest = malloc(sizeof(char) * (ft_strlen(src) + 1));
-    if (!dest)
-        return (NULL);
-    while (src[i])
+    i = ft_strlen(argv[1]) - 1;
+    if (argc == 2)
     {
-        dest[i] = src[i];
-        i++;
+        while (i >= 0)
+            write(1, &argv[1][i--], 1);
     }
-    dest[i] = '\0';
-    return (dest);
-}
-
-#include <stdio.h>
-
-int main(int argc, char *argv[])
-{
-    printf("%s\n", ft_strdup(argv[1]));
-    return argc;
+    write(1, "\n", 1);
+    return (0);
 }

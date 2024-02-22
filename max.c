@@ -1,49 +1,40 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strdup.c                                        :+:      :+:    :+:   */
+/*   max.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: emilefournier <emilefournier@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/14 13:09:43 by emilefourni       #+#    #+#             */
-/*   Updated: 2024/02/14 13:15:12 by emilefourni      ###   ########.fr       */
+/*   Created: 2024/02/14 12:47:53 by emilefourni       #+#    #+#             */
+/*   Updated: 2024/02/14 13:08:44 by emilefourni      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
-
-int ft_strlen(char *str)
+int max(int *tab, unsigned int len)
 {
-    int i;
+    unsigned int i;
+    unsigned int max;
 
     i = 0;
-    while (str[i])
-        i++;
-    return (i);
-}
-
-char    *ft_strdup(char *src)
-{
-    int i;
-    char *dest;
-
-    i = 0;
-    dest = malloc(sizeof(char) * (ft_strlen(src) + 1));
-    if (!dest)
-        return (NULL);
-    while (src[i])
+    max = tab[i];
+    if (len == 0)
+        return (0);
+    while(i < len)
     {
-        dest[i] = src[i];
+        if (max < (unsigned int) tab[i])
+            max = tab[i];
         i++;
     }
-    dest[i] = '\0';
-    return (dest);
+    return (max);
 }
 
 #include <stdio.h>
+#include <stdlib.h>
 
-int main(int argc, char *argv[])
+int main(void)
 {
-    printf("%s\n", ft_strdup(argv[1]));
-    return argc;
+    int tab[0];
+    int len = 0;
+    printf("%d\n", max(tab, len));
+    return 0;
 }

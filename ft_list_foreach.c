@@ -1,49 +1,41 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strdup.c                                        :+:      :+:    :+:   */
+/*   ft_list_foreach.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: emilefournier <emilefournier@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/14 13:09:43 by emilefourni       #+#    #+#             */
-/*   Updated: 2024/02/14 13:15:12 by emilefourni      ###   ########.fr       */
+/*   Created: 2024/02/22 11:41:38 by emilefourni       #+#    #+#             */
+/*   Updated: 2024/02/22 14:41:19 by emilefourni      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
+#include "ft_list.h"
 
-int ft_strlen(char *str)
+void    ft_list_foreach(t_list *begin_list, void (*f)(void *))
+{
+    t_list *list_ptr;
+
+    list_ptr = begin_list;
+    while (list_ptr)
+    {
+        (*f)(list_ptr->data);
+        list_ptr = list_ptr->next;
+    }
+}
+
+int	ft_list_size(t_list *begin_list)
 {
     int i;
 
     i = 0;
-    while (str[i])
+    if (begin_list == 0)
+        return (0);
+    while (begin_list)
+    {
+        begin_list = begin_list->next;
         i++;
+    }
     return (i);
 }
 
-char    *ft_strdup(char *src)
-{
-    int i;
-    char *dest;
-
-    i = 0;
-    dest = malloc(sizeof(char) * (ft_strlen(src) + 1));
-    if (!dest)
-        return (NULL);
-    while (src[i])
-    {
-        dest[i] = src[i];
-        i++;
-    }
-    dest[i] = '\0';
-    return (dest);
-}
-
-#include <stdio.h>
-
-int main(int argc, char *argv[])
-{
-    printf("%s\n", ft_strdup(argv[1]));
-    return argc;
-}

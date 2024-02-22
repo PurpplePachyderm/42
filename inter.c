@@ -1,69 +1,75 @@
-include <unistd.h>
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   inter.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: emilefournier <emilefournier@student.42    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/02/20 13:39:52 by emilefourni       #+#    #+#             */
+/*   Updated: 2024/02/22 12:29:45 by emilefourni      ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-int	inter(char *str, char c, int len)
+#include <unistd.h>
+
+/*void    inter(char *s1, char *s2)
 {
-	int	i = 0;
+   int used[256] = {0};
+   int i = 0;
 
-	while (str[i] && (i < len || len == -1))
-		if (str[i++] == c)
-			return (1);
-	return (0);
+   while (s1[i])
+   {
+        used[(int)s1[i]] = 1;
+        i++;
+   }
+   i = 0;
+   while (s2[i])
+   {
+        if (used[(int)s1[i]] == 1)
+        {
+            write(1, &s1[i], 1);
+            used[(int)s1[i]] = 2;
+        }
+        i++;
+   }
+}*/
+
+void solve(char *str1, char *str2) 
+{
+    int i;
+    int seen[256] = {0};
+
+    i = 0;
+    while(str2[i])
+    {
+        if (seen[(int)str2[i]] == 0)
+            seen[(int)str2[i]] = 1;
+        i++;
+    }
+    i = 0;
+    while (str1[i])
+    {
+        if (seen[(int)str1[i]] == 1)
+        {
+            write(1, &str1[i], 1);
+            seen[(int)str1[i]] = 2;
+        }
+        i++;
+    }
+
 }
 
-int	main(int argc, char *argv[])
-{
-	int	i;
-
+int	main(int argc, char **argv) {
 	if (argc == 3)
-	{
-		i = 0;
-		while (argv[1][i])
-		{
-			if (!inter(argv[1], argv[1][i], i) && inter(argv[2], argv[1][i], -1))
-				write(1, &argv[1][i], 1);
-			i++;
-		}
-	}
+		solve(argv[1], argv[2]);
 	write(1, "\n", 1);
-	return (0);
+	return 0;
 }
 
-// #include <unistd.h>
-
-// int is_char_present(char *str, char c)
-// {
-//     while (*str)
-// 	{
-//         if (*str == c)
-//             return 1;
-//         str++;
-//     }
-//     return 0;
-// }
-
-// void display_common_characters(char *str1, char *str2)
-// {
-//     int seen[256] = {0}; // assuming ASCII characters
-
-//     while (*str1)
-// 	{
-//         if (is_char_present(str2, *str1) && !seen[*str1])
-// 		{
-//             write(1, str1, 1);
-//             seen[*str1] = 1;
-//         }
-//         str1++;
-//     }
-//     write(1, "\n", 1);
-// }
-
-// int main(int argc, char *argv[])
-// {
-//     if (argc != 3)
-// 	{
-//         write(1, "\n", 1);
-//         return 0;
-//     }
-//     display_common_characters(argv[1], argv[2]);
-//     return 0;
-// }
+/*int main(int argc, char *argv[])
+{
+    if (argc == 3)
+        inter(argv[1], argv[2]);
+    write(1, "\n", 1);
+    return 0;
+}*/

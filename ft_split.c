@@ -3,92 +3,94 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emfourni <emfourni@student.42.fr>          +#+  +:+       +#+        */
+/*   By: emilefournier <emilefournier@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/17 15:03:57 by emfourni          #+#    #+#             */
-/*   Updated: 2023/11/20 17:32:07 by emfourni         ###   ########.fr       */
+/*   Created: 2024/02/21 17:35:12 by emilefourni       #+#    #+#             */
+/*   Updated: 2024/02/21 18:45:19 by emilefourni      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include <stdlib.h>
 
-static size_t	ft_countword(char const *str, char c)
+int ft_isspace(char c)
 {
-	size_t	index;
-	size_t	count;
-
-	index = 0;
-	count = 0;
-	while (str[index])
-	{
-		while (str[index] && str[index] == c)
-			index++;
-		if (str[index] && str[index] != c)
-		{
-			count++;
-			while (str[index] && str[index] != c)
-				index++;
-		}
-	}
-	return (count);
+    return (c == ' ' || c == '\t' || c == '\n');
 }
 
-static	char	*ft_worddup(const char *str, char c)
+int ft_countwords(char *str)
 {
-	size_t	index;
-	char	*dst;
+    int i;
+    int wordcount;
 
-	index = 0;
-	while (str[index] && str[index] != c)
-		index++;
-	dst = malloc(sizeof(char) * (index + 1));
-	if (!dst)
-		return (NULL);
-	index = 0;
-	while (str[index] && str[index] != c)
-	{
-		dst[index] = str[index];
-		index++;
-	}
-	dst[index] = '\0';
-	return (dst);
+    i = 0;
+    wordcount = 0;
+    while (str[i])
+    {
+        if ((!ft_isspace(str[i]) && ft_isspace(str[i - 1])) || (!ft_isspace(str[i]) && i == 0))
+            wordcount++;
+        i++;
+    }
+    return (wordcount);
 }
 
-void	ft_free(char **str, int i)
+char *ft_worddup(char *str)
 {
-	while (i > 0)
-	{
-		free(str[i]);
-		i--;
-	}
-	free(str);
+    int i;
+    char *dest;
+
+    i = 0;
+    while (str[i] && !ft_isspace(str[i]))
+        i++;
+    if (!(dest = malloc(sizeof(char) * (i + 1))))
+        return (NULL);
+    i = 0;
+    while (str[i] && !ft_isspace(str[i]))
+    {
+        dest[i] = str[i];
+        i++;
+    }
+    dest[i] = '\0';
+    return (dest);
 }
 
-char	**ft_split(char const *s, char c)
+char **ft_split(char *str)
 {
-	int		i;
-	char	**split;
+    int i;
+    int words;
+    char **split;
 
-	i = 0;
-	if (!s)
-		return (0);
-	split = malloc(sizeof(char *) * (ft_countword(s, c) + 1));
-	if (!split)
-		return (NULL);
-	while (*s)
-	{
-		while (*s && *s == c)
-			s++;
-		if (*s && *s != c)
-		{
-			split[i] = ft_worddup(s, c);
-			if (!split[i])
-				return (ft_free(split, i), NULL);
-			i++;
-			while (*s && *s != c)
-				s++;
-		}
-	}
-	split[i] = NULL;
-	return (split);
+    i = 0;
+    words = ft_countwords(str);
+    if (!(split = malloc(sizeof(char *) * (words + 1))))
+        return (NULL);
+    while (*str)
+    {
+        while (*str && ft_isspace(*str))
+            str++;
+        if (*str && !ft_isspace(*str))
+        {
+            split[i] = ft_worddup(str);
+            i++;
+            while (*str && !ft_isspace(*str))
+                str++;
+        }
+    }
+    split[i] = NULL;
+    return (split);
+}
+
+#include <stdio.h>
+
+int		main()
+{
+    char **arr;
+
+    char *phrase = "hello   world    caca     emile    MMMARRCCCC";
+    arr = ft_split(phrase);
+    printf("%s\n", arr[0]);
+    printf("%s\n", arr[1]);
+    printf("%s\n", arr[2]);
+    printf("%s\n", arr[3]);
+    printf("%s\n", arr[4]);
+    printf("%s\n", arr[5]);
 }
